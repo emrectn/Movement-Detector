@@ -1,6 +1,7 @@
 package com.example.user.sensorsample;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.hardware.Sensor;
@@ -11,13 +12,18 @@ import android.os.Vibrator;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.google.gson.Gson;
 
+import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.List;
 
 
 public class MainActivity extends AppCompatActivity implements SensorEventListener {
@@ -28,6 +34,9 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
     private ImageView imageView, state_image;
     private double mAccelCurrent, average_mAccel, end_mAccel, last_mAccel;
     private int period, status, time, id, last_status;
+    private Button btn_veriler;
+    private int stop_time, walking_time, running_time;
+    private List<String> state_list;
     SharedPreferences sharedPref;
     SharedPreferences.Editor editor;
 
@@ -37,6 +46,20 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         initialize();
+
+        btn_veriler.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent veriler_intent = new Intent(MainActivity.this, DurumGecmisiActivity.class);
+                veriler_intent.putExtra("id", id);
+                getStateList();
+                veriler_intent.putExtra("stop_time", stop_time);
+                veriler_intent.putExtra("walking_time", walking_time);
+                veriler_intent.putExtra("running_time", running_time);
+                veriler_intent.putExtra("state_list", (Serializable) state_list);
+                startActivity(veriler_intent);
+            }
+        });
     }
 
     public void initialize()
@@ -53,14 +76,17 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
         imageView = (ImageView)findViewById(R.id.correct);
         state_image = (ImageView)findViewById(R.id.state_image);
 
+        btn_veriler = findViewById(R.id.btn_veriler);
+
         mAccelCurrent = SensorManager.GRAVITY_EARTH;
 
         average_mAccel = end_mAccel = period = 0;
         status = -1;
-        last_status = id = time = 0;
+        stop_time = walking_time = running_time = last_status = id = time = 0;
 
         sharedPref = this.getPreferences(Context.MODE_PRIVATE);
         editor = sharedPref.edit();
+        state_list = new ArrayList<String>();
 
 
     }
@@ -93,7 +119,7 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
             info.setText("Curr : " + mAccelCurrent);
             average_mAccel += mAccelCurrent;
 
-            if (period == 10) {
+            if (period == 24) {
                 //Log.i(MainActivity.class.getSimpleName(), "Period : " + period + "--" + Calendar.getInstance().getTime());
                 end_mAccel = (average_mAccel * 1.0) / period;
                 show_squart.setText("Result : " + end_mAccel);
@@ -104,6 +130,8 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
                 if ((end_mAccel > 9.4) && (end_mAccel < 10.121)) {
                     Log.i(MainActivity.class.getSimpleName(), "Duruyor : " + end_mAccel);
                     state_image.setBackgroundResource(R.drawable.stop);
+
+                    stop_time += time;
 
                     if (status != 0){
                         saveSharedPreference(status, time);
@@ -117,6 +145,8 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
                     Log.i(MainActivity.class.getSimpleName(), "Walking : " + end_mAccel);
                     state_image.setBackgroundResource(R.drawable.walking);
 
+                    walking_time += time;
+
                     if (status != 1){
                         saveSharedPreference(status, time);
                         time = 0;
@@ -128,6 +158,8 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
                     Log.i(MainActivity.class.getSimpleName(), "Running : " + end_mAccel);
                     state_image.setBackgroundResource(R.drawable.running);
                     imageView.setImageResource(R.mipmap.hata);
+
+                    running_time += time;
 
                     if (status != 2){
                         saveSharedPreference(status, time);
@@ -158,10 +190,22 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
 
     }
 
-    public void getSharedPreference(String id) {
+    public String getSharedPreference(String id) {
         String savedString = sharedPref.getString(""+id, "Kayıt Yok");
         Log.i(getClass().getSimpleName(), "Okunan : "+ savedString);
+        return savedString;
     }
+
+    public void getStateList(){
+        for (int i=id-1; i>=0; i--){
+            state_list.add(getSharedPreference(""+ i));
+        }
+//
+//        for (String a : state_list) {
+//            System.out.println(a);
+//        }
+    }
+
 }
 
 //Accelerometerın sensörünün doğru veri üretme testi: Düz zemine koyulduğunda kontrol edilebilir. (Su terazisi)
