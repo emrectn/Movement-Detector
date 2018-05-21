@@ -89,7 +89,6 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
         info = (TextView)findViewById(R.id.info);
         info2 = (TextView)findViewById(R.id.info2);
 
-        imageView = (ImageView)findViewById(R.id.correct);
         state_image = (ImageView)findViewById(R.id.state_image);
 
         btn_veriler = findViewById(R.id.btn_veriler);
@@ -114,11 +113,6 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
         m.registerListener(this, mSensor, 500000);
     }
 
-//    @Override
-//    protected void onPause() {
-//        super.onPause();
-//        m.unregisterListener(this);
-//    }
 
     // Sensör üzerinden gelen bilgilerin tutultuğu fonksiyondur. SensorEvent class’ı altında
     // bir bilgi alır bu bilgi bizim sensörümüzün tüm bilgilerini içermektedir.
@@ -175,7 +169,6 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
                 else {
                     Log.i(MainActivity.class.getSimpleName(), "Running : " + end_mAccel);
                     state_image.setBackgroundResource(R.drawable.running);
-                    imageView.setImageResource(R.mipmap.hata);
 
                     running_time += 2;
 

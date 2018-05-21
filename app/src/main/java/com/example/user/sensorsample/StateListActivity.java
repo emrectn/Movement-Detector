@@ -8,6 +8,8 @@ import android.os.Bundle;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
+import org.json.JSONObject;
+
 import java.util.ArrayList;
 
 public class StateListActivity extends AppCompatActivity {
@@ -38,24 +40,46 @@ public class StateListActivity extends AppCompatActivity {
 
         //listView için hazırladığımız adapter'i ayarlıyoruz.
         listView.setAdapter(adapter);
+
+
+        final String JSON_STRING="{\"employee\":{\"name\":\"Sachin\",\"salary\":56000}}";
+
     }
 
     public String getSharedPreference(String id) {
         String savedString = sharedPref.getString(""+id, "Kayıt Yok");
-        //Log.i(getClass().getSimpleName(), "Okunan : "+ savedString);
+        savedString = stringToJson(savedString);
         return savedString;
     }
 
     public void getStateList(){
         for (int i=id; i>=0; i--){
             String s = getSharedPreference(""+ i);
-
-            state_list.add(s);
+            if(s != null){
+                state_list.add(s);
+            }
         }
+    }
 
-//        for (String a : state_list) {
-//            System.out.println(a);
-//       }
+    public String stringToJson(String JSON_STRING) {
+        JSON_STRING = "{ \"data\":" + JSON_STRING + "}";
+        String str = null;
+        try {
+            JSONObject data = (new JSONObject(JSON_STRING)).getJSONObject("data");
+            String activity = data.getString("activity");
+            String time = data.getString("time");
+
+            if (time.equals("0")){
+                System.out.println("Sıfır Geldi");
+                return null;
+            }
+            str = "Activity : " + activity + "     " + "Time : " + time;
+            System.out.println(str);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return str;
     }
 
 

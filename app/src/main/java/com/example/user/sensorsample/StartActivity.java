@@ -31,7 +31,7 @@ public class StartActivity extends AppCompatActivity {
         btn_stop.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
+                stopService(new Intent(StartActivity.this, MyService.class));
             }
         });
     }
