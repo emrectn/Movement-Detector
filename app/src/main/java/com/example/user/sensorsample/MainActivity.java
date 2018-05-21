@@ -36,7 +36,7 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
     private int period, status, time, id, last_status;
     private Button btn_veriler;
     private int stop_time, walking_time, running_time;
-    private List<String> state_list;
+    private ArrayList<String> state_list;
     SharedPreferences sharedPref;
     SharedPreferences.Editor editor;
 
@@ -52,11 +52,16 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
             public void onClick(View view) {
                 Intent veriler_intent = new Intent(MainActivity.this, DurumGecmisiActivity.class);
                 veriler_intent.putExtra("id", id);
-                getStateList();
                 veriler_intent.putExtra("stop_time", stop_time);
                 veriler_intent.putExtra("walking_time", walking_time);
                 veriler_intent.putExtra("running_time", running_time);
-                veriler_intent.putExtra("state_list", (Serializable) state_list);
+                //veriler_intent.putStringArrayListExtra("state_list", (ArrayList<String>) state_list);
+
+                saveSharedPreference(status, time);
+                //getStateList();
+                time = 0;
+                status = 0;
+
                 startActivity(veriler_intent);
             }
         });
@@ -81,10 +86,10 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
         mAccelCurrent = SensorManager.GRAVITY_EARTH;
 
         average_mAccel = end_mAccel = period = 0;
-        status = -1;
+        status = 0;
         stop_time = walking_time = running_time = last_status = id = time = 0;
 
-        sharedPref = this.getPreferences(Context.MODE_PRIVATE);
+        sharedPref = this.getSharedPreferences("sensor", Context.MODE_PRIVATE);
         editor = sharedPref.edit();
         state_list = new ArrayList<String>();
 
@@ -119,7 +124,8 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
             info.setText("Curr : " + mAccelCurrent);
             average_mAccel += mAccelCurrent;
 
-            if (period == 24) {
+            //Log.i("İÇERDE", "!!!! : istek oldu"  + Calendar.getInstance().getTime());
+            if (period == 12) {
                 //Log.i(MainActivity.class.getSimpleName(), "Period : " + period + "--" + Calendar.getInstance().getTime());
                 end_mAccel = (average_mAccel * 1.0) / period;
                 show_squart.setText("Result : " + end_mAccel);
@@ -131,7 +137,7 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
                     Log.i(MainActivity.class.getSimpleName(), "Duruyor : " + end_mAccel);
                     state_image.setBackgroundResource(R.drawable.stop);
 
-                    stop_time += time;
+                    stop_time += 2;
 
                     if (status != 0){
                         saveSharedPreference(status, time);
@@ -145,7 +151,7 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
                     Log.i(MainActivity.class.getSimpleName(), "Walking : " + end_mAccel);
                     state_image.setBackgroundResource(R.drawable.walking);
 
-                    walking_time += time;
+                    walking_time += 2;
 
                     if (status != 1){
                         saveSharedPreference(status, time);
@@ -159,7 +165,7 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
                     state_image.setBackgroundResource(R.drawable.running);
                     imageView.setImageResource(R.mipmap.hata);
 
-                    running_time += time;
+                    running_time += 2;
 
                     if (status != 2){
                         saveSharedPreference(status, time);
@@ -185,26 +191,25 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
         String json = gson.toJson(data);
         editor.putString(""+id, json);
         editor.commit();
-        getSharedPreference(""+id);
         id += 1;
 
     }
-
-    public String getSharedPreference(String id) {
-        String savedString = sharedPref.getString(""+id, "Kayıt Yok");
-        Log.i(getClass().getSimpleName(), "Okunan : "+ savedString);
-        return savedString;
-    }
-
-    public void getStateList(){
-        for (int i=id-1; i>=0; i--){
-            state_list.add(getSharedPreference(""+ i));
-        }
 //
-//        for (String a : state_list) {
-//            System.out.println(a);
+//    public String getSharedPreference(String id) {
+//        String savedString = sharedPref.getString(""+id, "Kayıt Yok");
+//        //Log.i(getClass().getSimpleName(), "Okunan : "+ savedString);
+//        return savedString;
+//    }
+//
+//    public void getStateList(){
+//        for (int i=id-1; i>=0; i--){
+//            state_list.add(getSharedPreference(""+ i));
 //        }
-    }
+//
+////        for (String a : state_list) {
+////            System.out.println(a);
+////       }
+//    }
 
 }
 
