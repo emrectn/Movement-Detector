@@ -8,10 +8,10 @@
 
     <Button
         android:id="@+id/btn_back"
-        android:layout_width="176dp"
+        android:layout_width="139dp"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true"
+        android:layout_alignStart="@+id/txt_veri"
         android:layout_marginBottom="61dp"
         android:backgroundTint="#ff6a00"
         android:text="Geri" />
@@ -39,5 +39,14 @@
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="113dp" />
+
+    <Button
+        android:id="@+id/btn_next"
+        android:layout_width="139dp"
+        android:layout_height="wrap_content"
+        android:layout_alignEnd="@+id/txt_veri"
+        android:layout_alignTop="@+id/btn_back"
+        android:backgroundTint="#ff6a00"
+        android:text="Detaylar" />
 
 </RelativeLayout>
