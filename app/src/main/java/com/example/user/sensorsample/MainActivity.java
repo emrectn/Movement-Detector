@@ -34,7 +34,7 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
     private ImageView imageView, state_image;
     private double mAccelCurrent, average_mAccel, end_mAccel, last_mAccel;
     private int period, status, time, id, last_status;
-    private Button btn_veriler;
+    private Button btn_veriler, btn_back_start;
     private int stop_time, walking_time, running_time;
     private ArrayList<String> state_list;
     SharedPreferences sharedPref;
@@ -44,6 +44,7 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        startService(new Intent(this, MyService.class));
         setContentView(R.layout.activity_main);
         initialize();
 
@@ -65,6 +66,16 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
                 startActivity(veriler_intent);
             }
         });
+
+        btn_back_start.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent back_intent = new Intent();
+                setResult(RESULT_OK, back_intent);
+                finish();
+
+            }
+        });
     }
 
     public void initialize()
@@ -82,6 +93,7 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
         state_image = (ImageView)findViewById(R.id.state_image);
 
         btn_veriler = findViewById(R.id.btn_veriler);
+        btn_back_start = findViewById(R.id.btn_back_start);
 
         mAccelCurrent = SensorManager.GRAVITY_EARTH;
 
@@ -102,11 +114,11 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
         m.registerListener(this, mSensor, 500000);
     }
 
-    @Override
-    protected void onPause() {
-        super.onPause();
-        m.unregisterListener(this);
-    }
+//    @Override
+//    protected void onPause() {
+//        super.onPause();
+//        m.unregisterListener(this);
+//    }
 
     // Sensör üzerinden gelen bilgilerin tutultuğu fonksiyondur. SensorEvent class’ı altında
     // bir bilgi alır bu bilgi bizim sensörümüzün tüm bilgilerini içermektedir.
@@ -121,14 +133,14 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
             period += 1;
             mAccelCurrent = Math.sqrt(x * x + y * y + z * z);
 
-            info.setText("Curr : " + mAccelCurrent);
+            info.setText("Anlık : " + mAccelCurrent);
             average_mAccel += mAccelCurrent;
 
             //Log.i("İÇERDE", "!!!! : istek oldu"  + Calendar.getInstance().getTime());
             if (period == 12) {
                 //Log.i(MainActivity.class.getSimpleName(), "Period : " + period + "--" + Calendar.getInstance().getTime());
                 end_mAccel = (average_mAccel * 1.0) / period;
-                show_squart.setText("Result : " + end_mAccel);
+                show_squart.setText("Ort : " + end_mAccel);
                 period = 0;
                 average_mAccel = 0;
                 time = time + 2;
@@ -194,23 +206,4 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
         id += 1;
 
     }
-//
-//    public String getSharedPreference(String id) {
-//        String savedString = sharedPref.getString(""+id, "Kayıt Yok");
-//        //Log.i(getClass().getSimpleName(), "Okunan : "+ savedString);
-//        return savedString;
-//    }
-//
-//    public void getStateList(){
-//        for (int i=id-1; i>=0; i--){
-//            state_list.add(getSharedPreference(""+ i));
-//        }
-//
-////        for (String a : state_list) {
-////            System.out.println(a);
-////       }
-//    }
-
 }
-
-//Accelerometerın sensörünün doğru veri üretme testi: Düz zemine koyulduğunda kontrol edilebilir. (Su terazisi)

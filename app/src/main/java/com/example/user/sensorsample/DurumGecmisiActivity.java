@@ -16,7 +16,7 @@ import java.util.ArrayList;
 
 public class DurumGecmisiActivity extends AppCompatActivity {
 
-    private Button btn_back, btn_next;
+    private Button btn_back, btn_viewdata;
     private TextView txt_veri, txt_veri1, txt_veri2;
     private  int id, walking_time, stop_time, running_time;
     private ArrayList<String> state_list = new ArrayList<String>();
@@ -59,7 +59,7 @@ public class DurumGecmisiActivity extends AppCompatActivity {
         txt_veri2 = findViewById(R.id.txt_veri2);
 
         btn_back = findViewById(R.id.btn_back);
-        btn_next = findViewById(R.id.btn_next);
+        btn_viewdata = findViewById(R.id.btn_viewdata);
 
         final String JSON_STRING="{\"employee\":{\"name\":\"Sachin\",\"salary\":56000}}";
         try{
@@ -104,7 +104,7 @@ public class DurumGecmisiActivity extends AppCompatActivity {
             }
         });
 
-        btn_next.setOnClickListener(new View.OnClickListener() {
+        btn_viewdata.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Intent movement_intent = new Intent(DurumGecmisiActivity.this, StateListActivity.class);

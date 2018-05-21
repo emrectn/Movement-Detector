@@ -10,9 +10,11 @@
     <TextView
         android:id="@+id/show_squart"
         android:layout_width="236dp"
-        android:layout_height="53dp"
+        android:layout_height="44dp"
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
+        android:layout_marginTop="20dp"
+        android:textStyle="bold"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
@@ -60,12 +62,24 @@
 
     <Button
         android:id="@+id/btn_veriler"
-        android:layout_width="176dp"
+        android:layout_width="234dp"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
-        android:layout_marginBottom="61dp"
+        android:layout_marginBottom="60dp"
         android:backgroundTint="#ff6a00"
+        android:padding="15dp"
         android:text="Verileri Göster" />
+
+    <Button
+        android:id="@+id/btn_back_start"
+        android:layout_width="234dp"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="120dp"
+        android:backgroundTint="#d80000"
+        android:padding="15dp"
+        android:text="Geri" />
 
 </RelativeLayout>
