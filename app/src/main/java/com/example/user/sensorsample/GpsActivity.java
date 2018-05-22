@@ -7,10 +7,13 @@ import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.text.BoringLayout;
 import android.util.Log;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import de.nitri.gauge.Gauge;
 
@@ -30,12 +33,26 @@ public class GpsActivity extends AppCompatActivity implements LocationListener {
         gauge = findViewById(R.id.gauge);
         gauge.setValue(0);
 
-        LocationManager lm = (LocationManager) this.getSystemService(Context.LOCATION_SERVICE);
-        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            return;
+
+        getLocation();
+    }
+
+    public Location getLocation() {
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            Toast.makeText(this, "Permission not granted", Toast.LENGTH_SHORT).show();
+            return null;
         }
-        lm.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, this);
-        this.onLocationChanged(null);
+        LocationManager lm = (LocationManager)this.getSystemService(Context.LOCATION_SERVICE);
+        Boolean isGPSEnabled = lm.isProviderEnabled(LocationManager.GPS_PROVIDER);
+        if(isGPSEnabled) {
+            lm.requestLocationUpdates(LocationManager.GPS_PROVIDER,6000,10,this);
+            Location l =lm.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+            this.onLocationChanged(null);
+            return l;
+        }else {
+            Toast.makeText(this, "Please enable GPS", Toast.LENGTH_SHORT).show();
+        }
+        return null;
     }
 
     @Override

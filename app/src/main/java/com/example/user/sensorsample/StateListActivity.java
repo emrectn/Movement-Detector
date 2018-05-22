@@ -5,7 +5,9 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.View;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.ListView;
 
 import org.json.JSONObject;
@@ -14,6 +16,7 @@ import java.util.ArrayList;
 
 public class StateListActivity extends AppCompatActivity {
     private ListView listView;
+    private Button btn_back;
     private SharedPreferences sharedPref;
     private SharedPreferences.Editor editor;
     private ArrayList<String> state_list = new ArrayList<String>();
@@ -41,8 +44,20 @@ public class StateListActivity extends AppCompatActivity {
         //listView için hazırladığımız adapter'i ayarlıyoruz.
         listView.setAdapter(adapter);
 
+        btn_back = findViewById(R.id.btn_back_state_history);
 
-        final String JSON_STRING="{\"employee\":{\"name\":\"Sachin\",\"salary\":56000}}";
+        btn_back.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent back_intent = new Intent();
+                setResult(RESULT_OK, back_intent);
+                finish();
+
+            }
+        });
+
+
+
 
     }
 
@@ -55,9 +70,7 @@ public class StateListActivity extends AppCompatActivity {
     public void getStateList(){
         for (int i=id; i>=0; i--){
             String s = getSharedPreference(""+ i);
-            if(s != null){
-                state_list.add(s);
-            }
+            state_list.add(s);
         }
     }
 
@@ -69,10 +82,6 @@ public class StateListActivity extends AppCompatActivity {
             String activity = data.getString("activity");
             String time = data.getString("time");
 
-            if (time.equals("0")){
-                System.out.println("Sıfır Geldi");
-                return null;
-            }
             str = "Activity : " + activity + "     " + "Time : " + time;
             System.out.println(str);
 

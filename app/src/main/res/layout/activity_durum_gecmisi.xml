@@ -45,7 +45,7 @@
         android:layout_height="50dp"
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="95dp"
+        android:layout_marginTop="150dp"
         android:textStyle="bold" />
 
     <TextView
@@ -54,7 +54,7 @@
         android:layout_height="50dp"
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="205dp"
+        android:layout_marginTop="95dp"
         android:textStyle="bold" />
 
     <TextView
@@ -63,7 +63,7 @@
         android:layout_height="50dp"
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="150dp"
+        android:layout_marginTop="205dp"
         android:textStyle="bold" />
 
 </RelativeLayout>

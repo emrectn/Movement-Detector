@@ -1,10 +1,24 @@
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent" >
+
+    <Button
+        android:id="@+id/btn_back_state_history"
+        android:layout_width="234dp"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="60dp"
+        android:backgroundTint="#d80000"
+        android:padding="15dp"
+        android:text="Geri" />
+
     <ListView
         android:id="@+id/listView1"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_weight="1" >
-    </ListView>
-</LinearLayout>
+        android:layout_height="match_parent"
+        android:layout_marginBottom="115dp"
+        android:layout_weight="1"></ListView>
+
+
+</RelativeLayout>

@@ -8,6 +8,7 @@ import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
+import android.location.LocationManager;
 import android.os.Vibrator;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -194,6 +195,7 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
 
         Gson gson = new Gson();
         String json = gson.toJson(data);
+        Log.i(getClass().getSimpleName(), json);
         editor.putString(""+id, json);
         editor.commit();
         id += 1;
